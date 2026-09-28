@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CBSE Class 12 Maths — Relations & Functions Test</title>
+<style>
+:root{
+  --navy:#12243f; --navy2:#1b3660; --paper:#f7f5ef; --card:#ffffff;
+  --accent:#c8722c; --ink:#1c1c1c; --muted:#6b6b6b; --line:#e3ddce;
+  --ok:#2f7d4f; --bad:#b93e3e; --unseen:#d8d2c0;
+}
+*{box-sizing:border-box;}
+html,body{height:100%;}
+body{
+  margin:0; background:var(--paper); color:var(--ink);
+  font-family:Georgia,'Times New Roman',serif;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+.wrap{max-width:960px;margin:0 auto;padding:24px 16px 60px;}
+h1,h2,h3{font-family:Georgia,serif;font-weight:700;margin:0 0 6px;}
+.brandbar{background:var(--navy);color:#fff;padding:18px 16px;position:sticky;top:0;z-index:10;
+  padding-top:calc(18px + env(safe-area-inset-top,0px));}
+.brandbar .inner{max-width:960px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;}
+.brandbar h1{font-size:1.15rem;color:#f4ecd9;letter-spacing:.2px;}
+.brandbar p{margin:2px 0 0;font-size:.82rem;color:#b9c2d4;}
+.timer{font-family:'Courier New',monospace;font-size:1.3rem;background:#0e1c33;border:1px solid #2c4a75;
+  color:#f4d9b0;padding:6px 14px;border-radius:6px;letter-spacing:1px;}
+.timer.low{color:#ffb1b1;border-color:#8a3b3b;}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:26px 24px;
+  box-shadow:0 1px 3px rgba(0,0,0,.05);}
+.btn{font-family:Georgia,serif;font-size:.95rem;background:var(--navy);color:#fff;border:none;
+  padding:11px 22px;border-radius:6px;cursor:pointer;}
+.btn:hover{background:var(--navy2);}
+.btn.outline{background:transparent;color:var(--navy);border:1px solid var(--navy);}
+.btn.accent{background:var(--accent);}
+.btn.accent:hover{background:#b0611f;}
+.btn:disabled{opacity:.45;cursor:not-allowed;}
+/* start screen */
+#start .meta{display:flex;gap:26px;margin:18px 0 22px;flex-wrap:wrap;}
+#start .meta div{font-size:.9rem;color:var(--muted);}
+#start .meta b{display:block;color:var(--ink);font-size:1.05rem;}
+#start label{display:block;font-size:.88rem;color:var(--muted);margin-bottom:6px;}
+#start input[type=text]{width:100%;max-width:340px;padding:9px 12px;border:1px solid var(--line);
+  border-radius:6px;font-family:inherit;font-size:1rem;}
+#start ul{color:#3a3a3a;font-size:.92rem;line-height:1.7;padding-left:20px;}
+/* test screen */
+#test{display:none;gap:20px;grid-template-columns:1fr 230px;}
+.qhead{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;
+  border-bottom:1px solid var(--line);padding-bottom:10px;}
+.qhead span{color:var(--muted);font-size:.85rem;}
+.qtext{font-size:1.08rem;line-height:1.55;margin:0 0 20px;}
+.opt{display:flex;align-items:flex-start;gap:10px;padding:11px 12px;border:1px solid var(--line);
+  border-radius:7px;margin-bottom:10px;cursor:pointer;transition:.12s;}
+.opt:hover{border-color:var(--accent);}
+.opt.sel{border-color:var(--accent);background:#fbf1e6;}
+.opt input{margin-top:3px;}
+.navrow{display:flex;justify-content:space-between;margin-top:22px;gap:10px;}
+.palette{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:16px;
+  align-self:start;position:sticky;top:104px;}
+.palette h3{font-size:.85rem;color:var(--muted);text-transform:none;margin-bottom:10px;}
+.pgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;}
+.pgrid button{aspect-ratio:1;border:1px solid var(--line);background:var(--unseen);border-radius:5px;
+  font-size:.78rem;cursor:pointer;color:#4a4a4a;}
+.pgrid button.answered{background:var(--ok);color:#fff;border-color:var(--ok);}
+.pgrid button.current{outline:2px solid var(--navy);outline-offset:1px;}
+.legend{font-size:.75rem;color:var(--muted);margin-top:12px;line-height:1.9;}
+.dot{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:middle;}
+.submitbox{margin-top:16px;}
+/* result screen */
+#result{display:none;}
+.scorebig{font-size:2.6rem;color:var(--navy);margin:6px 0;}
+.stats{display:flex;gap:28px;flex-wrap:wrap;margin:14px 0 24px;}
+.stats div b{display:block;font-size:1.3rem;}
+.review .qtext{font-size:1rem;}
+.review .item{border-bottom:1px solid var(--line);padding:16px 0;}
+.review .item:last-child{border-bottom:none;}
+.review .tag{font-size:.75rem;padding:2px 8px;border-radius:10px;margin-left:8px;}
+.tag.correct{background:#e4f3e8;color:var(--ok);}
+.tag.wrong{background:#fbe7e7;color:var(--bad);}
+.tag.skip{background:#f0ede2;color:var(--muted);}
+.reviewopt{font-size:.92rem;padding:4px 0;color:#333;}
+.reviewopt.right{color:var(--ok);font-weight:700;}
+.reviewopt.chosenWrong{color:var(--bad);text-decoration:line-through;}
+@media(max-width:760px){
+  #test{grid-template-columns:1fr;}
+  .palette{position:static;order:-1;}
+  .pgrid{grid-template-columns:repeat(10,1fr);}
+}
+</style>
+</head>
+<body>
+
+<div class="brandbar">
+  <div class="inner">
+    <div>
+      <h1>CBSE Class 12 — Mathematics</h1>
+      <p>Chapter 1 · Relations and Functions · Online Test Series</p>
+    </div>
+    <div id="timerBox" style="display:none" class="timer">03:00:00</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- START SCREEN -->
+  <div id="start" class="card">
+    <h2>अध्याय 1: Relations and Functions</h2>
+    <p style="color:var(--muted);margin-top:0">Test शुरू करने से पहले नीचे दी गई जानकारी ध्यान से पढ़ें।</p>
+    <div class="meta">
+      <div><b>50</b>कुल प्रश्न (MCQ)</div>
+      <div><b>3 घंटे</b>समय सीमा</div>
+      <div><b>1 अंक</b>प्रति प्रश्न</div>
+      <div><b>50 अंक</b>कुल अंक</div>
+    </div>
+    <label for="nameInput">विद्यार्थी का नाम</label>
+    <input type="text" id="nameInput" placeholder="अपना नाम लिखें">
+    <ul>
+      <li>समय समाप्त होते ही टेस्ट अपने आप सबमिट हो जाएगा।</li>
+      <li>किसी भी प्रश्न पर सीधे दायीं ओर की पैलेट से जा सकते हैं।</li>
+      <li>हर प्रश्न के 4 विकल्पों में से केवल एक सही उत्तर चुनें।</li>
+      <li>नकारात्मक अंकन (negative marking) नहीं है।</li>
+      <li>सबमिट करने के बाद पूरा उत्तर-समीक्षा (answer review) दिखेगा।</li>
+    </ul>
+    <div style="margin-top:20px">
+      <button class="btn accent" onclick="startTest()">टेस्ट शुरू करें</button>
+    </div>
+  </div>
+
+  <!-- TEST SCREEN -->
+  <div id="test">
+    <div class="card">
+      <div class="qhead">
+        <h3 id="qNumHead">प्रश्न 1 / 50</h3>
+        <span>1 अंक</span>
+      </div>
+      <p class="qtext" id="qText"></p>
+      <div id="optionsBox"></div>
+      <div class="navrow">
+        <button class="btn outline" id="prevBtn" onclick="go(-1)">← पिछला</button>
+        <button class="btn outline" id="clearBtn" onclick="clearAns()">उत्तर हटाएं</button>
+        <button class="btn" id="nextBtn" onclick="go(1)">अगला →</button>
+      </div>
+    </div>
+    <div class="palette">
+      <h3>प्रश्न सूची</h3>
+      <div class="pgrid" id="pgrid"></div>
+      <div class="legend">
+        <div><span class="dot" style="background:var(--ok)"></span>उत्तर दिया गया</div>
+        <div><span class="dot" style="background:var(--unseen)"></span>शेष / नहीं देखा</div>
+      </div>
+      <div class="submitbox">
+        <button class="btn accent" style="width:100%" onclick="confirmSubmit()">टेस्ट सबमिट करें</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div id="result" class="card">
+    <h2>परिणाम — <span id="resName"></span></h2>
+    <div class="scorebig"><span id="scoreVal">0</span> / 50</div>
+    <div class="stats">
+      <div><b id="stCorrect" style="color:var(--ok)">0</b>सही</div>
+      <div><b id="stWrong" style="color:var(--bad)">0</b>गलत</div>
+      <div><b id="stSkip" style="color:var(--muted)">0</b>छोड़े गए</div>
+      <div><b id="stPct" style="color:var(--navy)">0%</b>प्रतिशत</div>
+      <div><b id="stTime" style="color:var(--navy)">--</b>समय लिया गया</div>
+    </div>
+    <h3 style="margin-top:8px;border-top:1px solid var(--line);padding-top:20px">उत्तर समीक्षा</h3>
+    <div class="review" id="reviewBox"></div>
+  </div>
+
+</div>
+
+<script>
+const QUESTIONS = [
+["समुच्चय A = {1,2,3} पर R = {(1,1),(2,2),(3,3)} है। R है:",["Reflexive only","Symmetric only","Transitive only","Equivalence relation"],3],
+["प्राकृत संख्याओं N पर R = {(a,b): a, b को विभाजित करता है (a divides b)} है:",["Reflexive and symmetric but not transitive","Reflexive and transitive but not symmetric","Symmetric and transitive but not reflexive","Equivalence relation"],1],
+["पूर्णांकों Z पर R = {(a,b): a−b एक पूर्णांक है} है:",["Reflexive only","Symmetric only","Equivalence relation","Neither reflexive, symmetric nor transitive"],2],
+["वास्तविक संख्याओं R पर R = {(a,b): a ≤ b²} है:",["Reflexive but not symmetric","Symmetric but not transitive","Equivalence relation","Neither reflexive, symmetric nor transitive"],3],
+["एक समतल में रेखाओं के समुच्चय पर 'समांतर है' (is parallel to) संबंध है:",["Reflexive only","Symmetric only","Equivalence relation","Transitive only"],2],
+["रेखाओं के समुच्चय पर 'लंबवत है' (is perpendicular to) संबंध है:",["Equivalence relation","Reflexive only","Symmetric only, but neither reflexive nor transitive","Transitive only"],2],
+["त्रिभुजों के समुच्चय पर 'सर्वांगसम है' (is congruent to) संबंध है:",["Symmetric only","Reflexive only","Equivalence relation","Neither reflexive nor symmetric"],2],
+["त्रिभुजों के समुच्चय पर 'समरूप है' (is similar to) संबंध है:",["Symmetric only","Equivalence relation","Reflexive only","Transitive only"],1],
+["समुच्चय {1,2} पर कुल कितने equivalence relations संभव हैं?",["1","2","3","4"],1],
+["समुच्चय {1,2,3} पर कुल कितने equivalence relations संभव हैं?",["3","4","5","6"],2],
+["R पर R = {(a,b): a < b} संबंध है:",["Reflexive and transitive but not symmetric","Transitive only, neither reflexive nor symmetric","Symmetric and transitive but not reflexive","Equivalence relation"],1],
+["R पर R = {(a,b): |a−b| ≤ 5} संबंध है:",["Reflexive and symmetric but not transitive","Reflexive and transitive but not symmetric","Equivalence relation","Symmetric only"],0],
+["'R = {(a,b): a और b एक ही शहर में रहते हैं}' संबंध है:",["Reflexive only","Symmetric only","Equivalence relation","Transitive only"],2],
+["किसी अरिक्त (non-empty) समुच्चय A पर खाली संबंध (empty relation) है:",["Reflexive, symmetric and transitive","Symmetric and transitive but not reflexive","Reflexive and symmetric but not transitive","Reflexive only"],1],
+["किसी समुच्चय A पर सार्वत्रिक संबंध (universal relation A×A) है:",["Reflexive only","Symmetric only","Equivalence relation","Neither reflexive, symmetric nor transitive"],2],
+["सभी लोगों के समुच्चय पर R = {(a,b): a, b का पिता है} संबंध है:",["Equivalence relation","Reflexive and symmetric","Neither reflexive, symmetric nor transitive","Symmetric only"],2],
+["f: R → R, जहाँ f(x) = 2x + 3 है:",["One-one but not onto","Onto but not one-one","One-one and onto (bijective)","Neither one-one nor onto"],2],
+["f: R → R, जहाँ f(x) = x² है:",["One-one and onto","One-one but not onto","Onto but not one-one","Neither one-one nor onto"],3],
+["f: N → N, जहाँ f(x) = x² है:",["One-one but not onto","Onto but not one-one","One-one and onto","Neither one-one nor onto"],0],
+["f: R → R, जहाँ f(x) = |x| है:",["One-one and onto","One-one but not onto","Onto but not one-one","Neither one-one nor onto"],3],
+["f: R → R, जहाँ f(x) = x³ है:",["One-one but not onto","Onto but not one-one","One-one and onto (bijective)","Neither one-one nor onto"],2],
+["f: N → N, जहाँ f(x) = x + 2 है:",["One-one but not onto","Onto but not one-one","One-one and onto","Neither one-one nor onto"],0],
+["f: R → R, जहाँ f(x) = 3 − 4x है:",["One-one but not onto","Onto but not one-one","One-one and onto (bijective)","Neither one-one nor onto"],2],
+["f: {1,2,3} → {4,5,6,7}, f = {(1,4),(2,5),(3,6)} है:",["One-one but not onto","Onto but not one-one","One-one and onto","Neither one-one nor onto"],0],
+["f: R → R, f(x) = 1/x (x = 0 पर परिभाषित नहीं):",["Bijective on R","One-one but not onto on R","Onto but not one-one on R","Not a function on R since undefined at x = 0"],3],
+["f: R → R, जहाँ f(x) = x² + 1 है:",["One-one and onto","One-one but not onto","Onto but not one-one","Neither one-one nor onto"],3],
+["यदि f(x) = 2x + 1 और g(x) = x − 2 हों, तो (fog)(x) =",["2x + 3","2x − 3","2x + 1","2x − 1"],1],
+["यदि f(x) = 2x + 1 और g(x) = x − 2 हों, तो (gof)(x) =",["2x − 1","2x + 1","2x − 3","2x − 4"],0],
+["यदि f(x) = x + 1 और g(x) = 2x हों, तो (fog)(2) =",["4","5","6","7"],1],
+["यदि f(x) = x² और g(x) = x + 3 हों, तो (gof)(x) =",["x² + 3","(x + 3)²","x² − 3","x + 3²"],0],
+["यदि f(x) = x² और g(x) = x + 3 हों, तो (fog)(x) =",["x² + 3","(x + 3)²","x² − 3","(x − 3)²"],1],
+["फलनों का संयोजन (composition of functions) है:",["Always commutative","Always associative","Never associative","Associative only for linear functions"],1],
+["यदि f: A→B और g: B→C दोनों आच्छादक (onto) हैं, तो gof है:",["One-one","Onto","Bijective","Neither one-one nor onto"],1],
+["यदि f: A→B और g: B→C दोनों एकैकी (one-one) हैं, तो gof है:",["One-one","Onto","Bijective","Neither one-one nor onto"],0],
+["यदि f: A→B और g: B→C दोनों bijective हैं, तो gof है:",["One-one only","Onto only","Bijective","Neither one-one nor onto"],2],
+["यदि gof एकैकी (one-one) है, तो अनिवार्यतः क्या सत्य है?",["f, one-one है","g, one-one है","दोनों onto हैं","कुछ नहीं कहा जा सकता"],0],
+["यदि gof आच्छादक (onto) है, तो अनिवार्यतः क्या सत्य है?",["f, onto है","g, onto है","दोनों one-one हैं","कुछ नहीं कहा जा सकता"],1],
+["एक फलन f: A→B व्युत्क्रमणीय (invertible) होता है यदि और केवल यदि f है:",["One-one only","Onto only","Bijective (one-one and onto)","Neither one-one nor onto"],2],
+["यदि f(x) = 2x + 3 व्युत्क्रमणीय है, तो f⁻¹(x) =",["(x − 3)/2","(x + 3)/2","2x − 3","2x + 3"],0],
+["यदि f(x) = (3x − 4)/5 है, तो f⁻¹(x) =",["(5x + 4)/3","(5x − 4)/3","(3x + 4)/5","(4x + 5)/3"],0],
+["यदि f: R→R, f(x) = x³ है, तो f⁻¹(x) =",["x³","x^(1/3)","3x","1/x³"],1],
+["समुच्चय A पर एक द्विआधारी संक्रिया (binary operation) एक फलन है:",["A → A","A × A → A","A → A × A","A × A → A × A"],1],
+["N पर निम्न में से कौन-सा एक द्विआधारी संक्रिया है?",["a * b = a − b","a * b = a / b","a * b = a + b","a * b = a − 2b"],2],
+["Z पर a * b = a + b − ab परिभाषित है। क्या यह क्रमविनिमेय (commutative) है?",["हाँ, commutative है","नहीं, commutative नहीं है","निर्धारित नहीं किया जा सकता","केवल धनात्मक पूर्णांकों के लिए"],0],
+["Z पर a * b = a + b − ab संक्रिया क्या साहचर्य (associative) है?",["हाँ, associative है","नहीं, associative नहीं है","निर्धारित नहीं किया जा सकता","केवल a = b के लिए"],0],
+["a * b = a + b − ab (Z पर) का तत्समक अवयव (identity element) है:",["0","1","−1","अस्तित्व में नहीं"],0],
+["N पर a * b = LCM(a, b) संक्रिया है:",["Commutative","Not commutative","केवल अभाज्य संख्याओं के लिए commutative","निर्धारित नहीं किया जा सकता"],0],
+["N पर a * b = LCM(a, b) का तत्समक अवयव है:",["0","1","2","अस्तित्व में नहीं"],1],
+["फलन f(x) = √(x − 1) का प्रांत (domain), R में है:",["(−∞, 1]","[1, ∞)","R","(1, ∞)"],1],
+["फलन f(x) = x², x ∈ R का परिसर (range) है:",["R","(0, ∞)","[0, ∞)","(−∞, 0]"],2]
+];
+
+let current=0, answers=new Array(QUESTIONS.length).fill(null);
+let totalSeconds=3*60*60, timerId=null, startTime=null;
+
+function startTest(){
+  document.getElementById('start').style.display='none';
+  document.getElementById('test').style.display='grid';
+  document.getElementById('timerBox').style.display='block';
+  buildPalette();
+  renderQuestion();
+  startTime=Date.now();
+  timerId=setInterval(tick,1000);
+}
+
+function tick(){
+  totalSeconds--;
+  const h=String(Math.floor(totalSeconds/3600)).padStart(2,'0');
+  const m=String(Math.floor((totalSeconds%3600)/60)).padStart(2,'0');
+  const s=String(totalSeconds%60).padStart(2,'0');
+  const box=document.getElementById('timerBox');
+  box.textContent=`${h}:${m}:${s}`;
+  if(totalSeconds<=300) box.classList.add('low');
+  if(totalSeconds<=0){ clearInterval(timerId); submitTest(); }
+}
+
+function renderQuestion(){
+  const [q,opts]=QUESTIONS[current];
+  document.getElementById('qNumHead').textContent=`प्रश्न ${current+1} / ${QUESTIONS.length}`;
+  document.getElementById('qText').textContent=q;
+  const box=document.getElementById('optionsBox');
+  box.innerHTML='';
+  opts.forEach((opt,i)=>{
+    const div=document.createElement('div');
+    div.className='opt'+(answers[current]===i?' sel':'');
+    div.onclick=()=>{answers[current]=i; renderQuestion(); updatePalette();};
+    div.innerHTML=`<input type="radio" name="opt" ${answers[current]===i?'checked':''} readonly><span>${opt}</span>`;
+    box.appendChild(div);
+  });
+  document.getElementById('prevBtn').disabled = current===0;
+  document.getElementById('nextBtn').textContent = current===QUESTIONS.length-1 ? 'समाप्त' : 'अगला →';
+  updatePaletteCurrent();
+}
+
+function clearAns(){ answers[current]=null; renderQuestion(); updatePalette(); }
+
+function go(dir){
+  if(current+dir<0 || current+dir>=QUESTIONS.length) return;
+  current+=dir;
+  renderQuestion();
+}
+
+function buildPalette(){
+  const grid=document.getElementById('pgrid');
+  grid.innerHTML='';
+  QUESTIONS.forEach((_,i)=>{
+    const b=document.createElement('button');
+    b.textContent=i+1;
+    b.onclick=()=>{current=i; renderQuestion();};
+    grid.appendChild(b);
+  });
+  updatePalette();
+}
+function updatePalette(){
+  const btns=document.querySelectorAll('#pgrid button');
+  btns.forEach((b,i)=>{ b.className = answers[i]!==null ? 'answered':''; });
+  updatePaletteCurrent();
+}
+function updatePaletteCurrent(){
+  document.querySelectorAll('#pgrid button').forEach((b,i)=>{
+    b.classList.toggle('current', i===current);
+  });
+}
+
+function confirmSubmit(){
+  const unanswered = answers.filter(a=>a===null).length;
+  const msg = unanswered>0
+    ? `${unanswered} प्रश्न अभी भी अनुत्तरित हैं। क्या आप फिर भी सबमिट करना चाहते हैं?`
+    : `क्या आप टेस्ट सबमिट करना चाहते हैं?`;
+  if(confirm(msg)) submitTest();
+}
+
+function submitTest(){
+  clearInterval(timerId);
+  document.getElementById('test').style.display='none';
+  document.getElementById('timerBox').style.display='none';
+  document.getElementById('result').style.display='block';
+
+  const name=document.getElementById('nameInput').value.trim() || 'विद्यार्थी';
+  document.getElementById('resName').textContent=name;
+
+  let correct=0, wrong=0, skip=0;
+  const reviewBox=document.getElementById('reviewBox');
+  reviewBox.innerHTML='';
+  QUESTIONS.forEach((item,i)=>{
+    const [q,opts,ans]=item;
+    const chosen=answers[i];
+    let tag='skip', tagText='छोड़ा गया';
+    if(chosen===null){ skip++; }
+    else if(chosen===ans){ correct++; tag='correct'; tagText='सही'; }
+    else { wrong++; tag='wrong'; tagText='गलत'; }
+
+    const div=document.createElement('div');
+    div.className='item';
+    let optsHtml='';
+    opts.forEach((o,j)=>{
+      let cls='reviewopt';
+      if(j===ans) cls+=' right';
+      else if(j===chosen) cls+=' chosenWrong';
+      optsHtml+=`<div class="${cls}">${j===ans?'✓ ':''}${o}</div>`;
+    });
+    div.innerHTML=`<div><b>प्रश्न ${i+1}.</b> ${q} <span class="tag ${tag}">${tagText}</span></div>
+      <div style="margin-top:8px">${optsHtml}</div>`;
+    reviewBox.appendChild(div);
+  });
+
+  const elapsed = Math.floor((Date.now()-startTime)/1000);
+  const eh=String(Math.floor(elapsed/3600)).padStart(2,'0');
+  const em=String(Math.floor((elapsed%3600)/60)).padStart(2,'0');
+  const es=String(elapsed%60).padStart(2,'0');
+
+  document.getElementById('scoreVal').textContent=correct;
+  document.getElementById('stCorrect').textContent=correct;
+  document.getElementById('stWrong').textContent=wrong;
+  document.getElementById('stSkip').textContent=skip;
+  document.getElementById('stPct').textContent=Math.round((correct/QUESTIONS.length)*100)+'%';
+  document.getElementById('stTime').textContent=`${eh}:${em}:${es}`;
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>
